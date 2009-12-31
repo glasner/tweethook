@@ -26,7 +26,7 @@ There are three main classes
 
 = Creating a new search
 
-search = Tweethook::Search.create('my keyword, :webhook => 'http://mysite.com/callback')
+search = Tweethook::Search.create('my keyword', :webhook => 'http://mysite.com/callback')
 
 All the properties are accessible as instance methods
 
