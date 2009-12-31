@@ -23,6 +23,12 @@ class Tweethook
     response.body.empty? ? nil : JSON.parse(response.body)
   end
   
+  def get(path,params)
+    response = Typhoeus::Request.get(Tweethook.url(path), :params => params)
+    return nil if response.code.eql?(403)
+    result = JSON.parse(response.body)    
+  end
+  
   
   def self.url(path)
     "https://#{Tweethook.user}:#{Tweethook.password}@api.tweethook.com#{path}"

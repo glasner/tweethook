@@ -4,6 +4,10 @@ class Tweethook::Result
   
   def initialize(args)
     args.each { |key,value| instance_variable_set("@#{key}",value)  }
+    
+    @is_reply = !@is_reply.zero?
+    @is_retweet = !@is_retweet.zero?
+    
   end
   
 end

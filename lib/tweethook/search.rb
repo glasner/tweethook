@@ -9,31 +9,37 @@ class Tweethook::Search
   end
   
   def self.find(id)
-    response = Typhoeus::Request.get(Tweethook.url('/info.json'), :params => {:id => id})
-    return nil if response.code.eql?(403)
-    result = JSON.parse(response.body).first
-    new(result)
+    response = Tweethook.get('/info.json', :id => id)
+    return nil if response.nil?
+    new(response.first)
   end
   
   attr_accessor :id, :search, :webhook, :active
   
   def initialize(args)
-    @id = args[:id] || args['id']
-    @search = args[:search] || args['search']
-    @webhook = args[:webhook] || args['webhook']
-    @active = args[:active] || args['active'] || true    
+    # change text keys to symbols
+    if args.any? { |arg| arg.is_a?(String)  }
+      args = args.inject({}) { |output,array| key,value = array; output[key.to_sym] = value;output  }
+    end    
+    # setup instance variable for every arg
+    args.each_with_key { |key,value| instance_variable_set("@#{key}",value)  }
+    @active = true if @active.nil?      
   end 
   
   def save
-    response = Tweethoook.post('/create.json',:search => @search, :webhook => @webhook, :active => @active)
-    @id = response.nil? ? nil : JSON.parse(response.body).first['id']
+    response = Tweethook.post('/create.json',:search => @search, :webhook => @webhook, :active => @active)
+    return nil if response.nil?
+    @id = response.first['id']
     self
   end 
   
+  def new_record?
+    not @id.nil?
+  end
+  
   def destroy
-    response = Typhoeus::Request.post(Tweethook.url('/destroy.json'), :params => {:id => @id})
-    return if response.body.empty?
-    response = JSON.parse(response.body)
+    response = Tweethook.post('/destroy.json',:id => @id)
+    return nil if response.nil?
     self.id = nil if response.first['id'].eql?(@id)    
   end
   
