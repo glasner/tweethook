@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake'
 
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
@@ -10,7 +11,7 @@ begin
     gem.email = "jordan@digitalignition.com"
     gem.homepage = "http://github.com/glasner/tweethook"
     gem.authors = ["Jordan Glasner"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

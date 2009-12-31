@@ -25,9 +25,8 @@ class Tweethook::Search
   end 
   
   def save
-    response = Typhoeus::Request.post(Tweethook.url("/create.json"),
-      :params => {:search => @search, :webhook => @webhook, :active => @active})
-    @id = response.body.empty? ? nil : JSON.parse(response.body).first['id']
+    response = Tweethoook.post('/create.json',:search => @search, :webhook => @webhook, :active => @active)
+    @id = response.nil? ? nil : JSON.parse(response.body).first['id']
     self
   end 
   

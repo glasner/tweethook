@@ -17,6 +17,12 @@ class Tweethook
     ENV['TWEETHOOK_API_PASS']
   end
   
+  def post(path,params)
+    response = Typhoeus::Request.post(Tweethook.url(path),
+      :params => params)
+    response.body.empty? ? nil : JSON.parse(response.body)
+  end
+  
   
   def self.url(path)
     "https://#{Tweethook.user}:#{Tweethook.password}@api.tweethook.com#{path}"
