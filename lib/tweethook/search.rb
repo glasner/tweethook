@@ -1,11 +1,9 @@
-#15585675
-
 class Tweethook::Search
   
   # create a new search at Tweethook
-  # Tweethook::Search.create('monkey', :post_to => 'http://where.com/callback' )
-  def self.create(query,args)
-    args.merge!({:query => query})
+  # Tweethook::Search.create('monkey', :webhook => 'http://where.com/callback' )
+  def self.create(search,args)
+    args.merge!({:search => seach})
     search = new(args)
     search.save
   end
@@ -17,16 +15,18 @@ class Tweethook::Search
     new(result)
   end
   
+  attr_accessor :id, :search, :webhook, :active
+  
   def initialize(args)
     @id = args[:id] || args['id']
-    @query = args[:query] || args['search']
-    @post_to = args[:post_to] || args['webhook']
+    @search = args[:search] || args['search']
+    @webhook = args[:webhook] || args['webhook']
     @active = args[:active] || args['active'] || true    
   end 
   
   def save
     response = Typhoeus::Request.post(Tweethook.url("/create.json"),
-      :params => {:search => @query, :webhook => @post_to, :active => @active})
+      :params => {:search => @search, :webhook => @webhook, :active => @active})
     @id = response.body.empty? ? nil : JSON.parse(response.body).first['id']
     self
   end 
