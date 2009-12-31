@@ -29,6 +29,9 @@ class Tweethook::Search
     end    
     # setup instance variable for every arg
     args.each { |key,value| instance_variable_set("@#{key}",value)  }
+    
+    @format ||= 'json'
+    
     change_active_to_boolean
   end 
   
@@ -62,17 +65,19 @@ class Tweethook::Search
     return false if response.nil?
     @active = true
   end
+  alias :resume :start
   
   def stop
     response = Tweethook.post('/stop.json', :id => @id)
     return false if response.nil?
     @active = false
   end
+  alias :pause :stop
   
   
   def destroy
     response = Tweethook.post('/destroy.json',:id => @id)
-    return nil if response.nil?
+    return false if response.nil?
     self.id = nil if response.first['id'].eql?(@id)    
   end
   

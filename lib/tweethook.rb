@@ -5,7 +5,6 @@ require 'json'
 
 class Tweethook
   
-  
   autoload :Search, 'tweethook/search'
   autoload :Post, 'tweethook/post'
   autoload :Result, 'tweethook/result'
