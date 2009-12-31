@@ -1,6 +1,85 @@
 = tweethook
 
-Description goes here.
+A simple Ruby wrapper for accessing Tweethook's API.
+
+= required gems
+
+* tyhpoeus
+* json
+
+= required ENV variables
+
+* TWEETHOOK_API_USER
+* TWEETHOOK_API_PASS
+* TWEETHOOK_SIGNATURE
+
+See http://docs.heroku.com/config-vars for the how and why.
+
+= Usage
+
+There are three main classes 
+
+* Tweethook::Search
+* Tweethook::Post
+* Tweethook::Result
+
+
+= Creating a new search
+
+search = Tweethook::Search.create('my keyword, :webhook => 'http://mysite.com/callback')
+
+All the properties are accessible as instance methods
+
+search.id => 12560301
+search.search => 'my keyword'
+search.webhook => 'http://mysite.com/callback'
+search.format => 'json' # this lib only works w/ the JSON format
+
+= Receiving a new post
+
+Tweethook::Post is a subclass of Array that takes the raw JSON from Tweethook. The JSON is parsed into a hash and the results are mapped to Tweethook::Result. The results can be accessed as if it was just an array, i.e post[0] = first result
+
+# example JSON from post (accessible in request.body)
+json = '{
+    "status_count": 2,
+    "signature": "XXXXXXXXXXXXXXXXXXXXXXXX",
+    "time": 1253055217,
+    "results": [{
+        "user": "deputy5765",
+        "tweet": "@Lu_Guz You will have to install a Twitter application in Facebook. Log in, search Twitter, install the app, then enter the info #geeksquad",
+        "usrimg": "http:\/\/a3.twimg.com\/profile_images\/107659093\/0_normal.jpg",
+        "tid": 4015703048,
+        "tstamp": "Tue, 15 Sep 2009 22:53:12 +0000",
+        "unix_tstamp": 1253055192,
+        "is_reply": 1,
+        "is_retweet": 0,
+        "mentions": "Lu_Guz",
+        "source": "Tweetie",
+        "sourcelink": "http:\/\/www.atebits.com\/",
+        "search_query": "twitter"
+    },
+    {
+        "user": "heatherkentart",
+        "tweet": "@k8otomato - Thanks, I will definitely try later. I will also postpone any negative opinions of Twitter. :D",
+        "usrimg": "http:\/\/a3.twimg.com\/profile_images\/417128285\/me_normal.jpg",
+        "tid": 4015703318,
+        "tstamp": "Tue, 15 Sep 2009 22:53:11 +0000",
+        "unix_tstamp": 1253055191,
+        "is_reply": 1,
+        "is_retweet": 0,
+        "mentions": "k8otomato",
+        "source": "web",
+        "sourcelink": "http:\/\/twitter.com\/",
+        "search_query": "twitter"
+    }	
+}'
+
+post = Tweethook::Post.new(json)
+
+post.size => 2
+
+post.first.user => 'deputy5765'
+
 
 == Note on Patches/Pull Requests
  
