@@ -12,4 +12,12 @@ class Tweethook::Result
     @is_retweet = !@is_retweet.zero?
   end
   
+  def reply?
+    @is_reply
+  end
+  
+  def retweet?
+    @is_retweet
+  end
+  
 end
